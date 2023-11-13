@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZING MP4</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+  </head>
+  <body class="player">
+    <div class="dashboard">
+      <header>
+        <h4 class="inform">Now Playing</h4>
+        <h2 class="cur-song">Sting 57th</h2>
+      </header>
+
+      <div class="cd">
+        <img class="cd-thumb" src="/assets/img/anh nho ra.jpg" alt="" />
+      </div>
+
+      <div class="control">
+        <div class="btn rotate">
+          <i class="fa-solid fa-rotate-right"></i>
+        </div>
+        <div class="btn back">
+          <i class="fa-solid fa-backward"></i>
+        </div>
+        <div class="btn toggle">
+          <i class="btnPause fa-solid fa-pause"></i>
+          <i class="btnPlay fa-solid fa-play"></i>
+        </div>
+        <div class="btn next">
+          <i class="fa-solid fa-forward"></i>
+        </div>
+        <div class="btn shuffle">
+          <i class="fa-solid fa-shuffle"></i>
+        </div>
+        <div class="btn heart">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+      </div>
+
+      <input
+        type="range"
+        id="progress"
+        class="progress"
+        value="0"
+        step="1"
+        min="0"
+        max="100"
+      />
+
+      <audio id="audio" src=""></audio>
+
+      <div class="time">
+        <span class="current-time">00:00 </span>
+        <span class="duration">02:20</span>
+      </div>
+    </div>
+
+    <div class="playlist"></div>
+  </body>
+  <script>
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+    const heading = $("header h2");
+    const cdThumb = $(".cd-thumb");
+    const cd = $(".cd-thumb");
+    const audio = $("#audio");
+    const playBtn = $(".toggle");
+    const player = $(".player");
+    const progress = $(".progress");
+    const nextBtn = $(".fa-forward");
+    const backBtn = $(".fa-backward");
+    const randomBtn = $(".fa-shuffle");
+    const repeatBtn = $(".fa-rotate-right");
+    const playlist = $(".playlist");
+
+    const app = {
+      currentIndex: 0,
+      isplaying: false,
+      isRandom: false,
+      isRepeat: false,
+      songs: [
+        {
+          name: "Bao tiền một mớ bình yên",
+          singer: "2AM",
+          song: "/assets/song/bao tiền một mớ bình yên.mp3",
+          img: "/assets/img/bao tiền một mớ bình yên.jpg",
+        },
+        {
+          name: "Anh Nhớ Ra",
+          singer: "Vũ",
+          song: "/assets/song/ANH NHỚ RA  Vũ .mp3",
+          img: "/assets/img/anh nho ra.jpg",
+        },
+        {
+          name: "Ghé Qua",
+          singer: "Dick x PC x Tofu",
+          song: "/assets/song/GHÉ QUA  Dick x PC x Tofu.mp3",
+          img: "/assets/img/ghe qua.jpg",
+        },
+        {
+          name: "Mùa Xuân Đầu Tiên",
+          singer: "TAMA Cover",
+          song: "/assets/song/MÙA XUÂN ĐẦU TIÊN  TAMA Cover.mp3",
+          img: "/assets/img/mua xuan dau tien.jpg",
+        },
+        {
+          name: "Phố Không Em",
+          singer: "Thái Đinh",
+          song: "/assets/song/Phố Không Em  Thái Đinh .mp3",
+          img: "/assets/img/pho khong em.jpg",
+        },
+        {
+          name: "Thắc Mắc",
+          singer: "Thịnh Suy",
+          song: "/assets/song/Thịnh Suy  Thắc Mắc MĐX.mp3",
+          img: "/assets/img/thac mac.jpg",
+        },
+        {
+          name: "Thanh Xuân",
+          singer: "Da Lab",
+          song: "/assets/song/Thanh Xuân  Da LAB Official MV.mp3",
+          img: "/assets/img/thanh xuan.jpg",
+        },
+        {
+          name: "Thích Quá Rùi Nà",
+          singer: "Tling",
+          song: "/assets/song/tlinh  Thích Quá Rùi Nà ft Trung Trần  OFFICIAL LYRICS VIDEO.mp3",
+          img: "/assets/img/thich qua rui na.jpg",
+        },
+        {
+          name: "Xuân Thì",
+          singer: "Hà Anh Tuấn",
+          song: "/assets/song/XUÂN THÌ  HÀ ANH TUẤN.mp3",
+          img: "/assets/img/xuan thi.jpg",
+        },
+      ],
+      render: function () {
+        const htmls = this.songs.map((song, index) => {
+          return `
+            <div class="song ${
+              index === this.currentIndex ? "activeSong" : ""
+            }" data-index = ${index}>
+              <div class="thumb">
+                <img class="song-img" src="${song.img}" alt="" />
+              </div>
+              <div class="body">
+                <h3 class="title">${song.name}</h3>
+                <p class="author">${song.singer}</p>
+              </div>
+              <div class="option">
+                <i class="btn fa-solid fa-ellipsis"></i>
+              </div>
+            </div>
+            `;
+        });
+        playlist.innerHTML = htmls.join("");
+      },
+
+      handleEvent: function () {
+        const _this = this;
+        const cdWidth = cd.offsetWidth;
+
+        const cdThumbAnimate = cdThumb.animate(
+          [
+            {
+              transform: "rotate(360deg)",
+            },
+          ],
+          {
+            duration: 10000,
+            iterations: Infinity,
+          }
+        );
+        cdThumbAnimate.pause();
+
+        document.onscroll = function () {
+          const scrollTop =
+            document.documentElement.scrollTop || window.scrollY;
+          const newCdWidth = cdWidth - scrollTop;
+
+          cd.style.width = newCdWidth > 0 ? newCdWidth + "px" : 0;
+          cd.style.opacity = newCdWidth / cdWidth;
+        };
+
+        playBtn.onclick = function () {
+          if (_this.isplaying) {
+            audio.pause();
+          } else {
+            audio.play();
+          }
+        };
+
+        audio.onplay = function () {
+          _this.isplaying = true;
+          player.classList.add(".playing");
+          cdThumbAnimate.play();
+        };
+
+        audio.onpause = function () {
+          _this.isplaying = false;
+          player.classList.remove(".playing");
+          cdThumbAnimate.pause();
+        };
+
+        audio.ontimeupdate = function () {
+          if (audio.duration) {
+            const precentSong = (audio.currentTime / audio.duration) * 100;
+            progress.value = precentSong;
+          }
+        };
+
+        audio.onended = function () {
+          if (_this.isRepeat) {
+            audio.play();
+          } else nextBtn.click();
+        };
+
+        progress.oninput = function (e) {
+          const seekTime = (e.target.value * audio.duration) / 100;
+          audio.currentTime = seekTime;
+        };
+
+        nextBtn.onclick = function () {
+          if (_this.isRandom) {
+            _this.randomSong();
+          } else {
+            _this.nextSong();
+          }
+          audio.play();
+          _this.render();
+        };
+
+        backBtn.onclick = function () {
+          if (_this.isRandom) {
+            _this.randomSong();
+          } else {
+            _this.backSong();
+          }
+          audio.play();
+          _this.render();
+        };
+
+        randomBtn.onclick = function (e) {
+          _this.isRandom = !_this.isRandom;
+          randomBtn.classList.toggle("active", _this.isRandom);
+        };
+
+        repeatBtn.onclick = function (e) {
+          _this.isRepeat = !_this.isRepeat;
+          repeatBtn.classList.toggle("active", _this.isRepeat);
+        };
+
+        playlist.onclick = function (e) {
+          const closestSong = e.target.closest(".song:not(.activeSong)");
+          const closestOption = e.target.closest(".option");
+          if (closestSong || closestOption) {
+            if (closestSong) {
+              _this.currentIndex = Number(closestSong.dataset.index);
+              _this.loadCurrentSong();
+              _this.render();
+              audio.play();
+            }
+            if (closestOption) {
+              console.log(123);
+            }
+          }
+        };
+      },
+
+      defineProperties: function () {
+        Object.defineProperty(this, "currentSong", {
+          get: function () {
+            return this.songs[this.currentIndex];
+          },
+        });
+      },
+
+      loadCurrentSong: function () {
+        heading.textContent = this.currentSong.name;
+        cdThumb.src = this.currentSong.img;
+        audio.src = this.currentSong.song;
+      },
+
+      nextSong: function () {
+        this.currentIndex++;
+        if (this.currentIndex >= this.songs.length) {
+          this.currentIndex = 0;
+        }
+        this.loadCurrentSong();
+      },
+
+      backSong: function () {
+        this.currentIndex--;
+        if (this.currentIndex < 0) {
+          this.currentIndex = this.songs.length - 1;
+        }
+        this.loadCurrentSong();
+      },
+
+      randomSong: function () {
+        let newIndex;
+        do {
+          newIndex = Math.floor(Math.random() * this.songs.length);
+        } while (newIndex === this.currentIndex);
+        this.currentIndex = newIndex;
+        this.loadCurrentSong();
+      },
+
+      start: function () {
+        this.defineProperties();
+
+        this.loadCurrentSong();
+
+        this.render();
+
+        this.handleEvent();
+      },
+    };
+    app.start();
+  </script>
+</html>

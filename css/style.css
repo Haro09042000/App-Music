@@ -1,0 +1,168 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1)),
+    url(/assets/img/bao\ tiền\ một\ mớ\ bình\ yên.jpg) no-repeat center/cover;
+  color: #fff;
+}
+
+.player {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.dashboard {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  max-width: 480px;
+  background-color: #827878;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 2px 2px 8px rgb(135 131 131);
+}
+
+header {
+  text-align: center;
+}
+.inform {
+  padding: 0px 10px 10px 10px;
+}
+.cur-song {
+  padding-bottom: 20px;
+}
+
+.cd {
+  margin: auto;
+  width: 200px;
+  display: flex;
+}
+
+.cd-thumb {
+  border-radius: 50%;
+  margin: auto;
+  width: 200px;
+  background-size: cover;
+}
+
+.song-img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.control {
+  text-align: center;
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  justify-content: space-between;
+  width: 250px;
+  margin: auto;
+  padding: 20px 0 10px 20px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+
+.btnPause {
+  background-color: #b51212;
+  padding: 5px 10px 5px 11px;
+  margin: -5px;
+  border-radius: 50%;
+}
+
+.btnPlay {
+  background-color: #b51212;
+  padding: 5px 7px 5px 10px;
+  margin: -5px;
+  border-radius: 50%;
+}
+
+.player .btnPause {
+  display: none;
+}
+
+.player .playing .btnPause {
+  display: inline-block;
+}
+
+.player .playing .btnPlay {
+  display: none;
+}
+
+.btn {
+  padding: 5px;
+  font-size: 20px;
+}
+
+.btn:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.fa-heart {
+  margin-right: -40px;
+  display: inline;
+}
+.fa-heart:hover {
+  color: #b51212;
+}
+
+.active {
+  color: #b51212;
+}
+
+.activeSong {
+  color: #908c8c;
+}
+
+.song:active {
+  opacity: 0.8;
+}
+
+input#progress {
+  width: 70%;
+  margin: auto;
+  display: block;
+}
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  width: 80%;
+  margin: auto;
+}
+.playlist {
+  margin-top: 450px;
+  width: 450px;
+}
+
+.song {
+  display: flex;
+  background-color: rgba(150, 135, 135, 0.493);
+  padding: 14px 14px 8px 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  align-items: center;
+  box-shadow: 2px 2px 8px rgb(135 131 131);
+}
+.body {
+  padding: 0 16px;
+  font-size: 16px;
+  flex: 1;
+}
