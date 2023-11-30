@@ -96,12 +96,12 @@ header {
   display: none;
 }
 
-.player .playing .btnPause {
-  display: inline-block;
+.player .btnPlay {
+  display: none;
 }
 
-.player .playing .btnPlay {
-  display: none;
+.playing {
+  display: inline-block !important;
 }
 
 .btn {

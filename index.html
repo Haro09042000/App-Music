@@ -30,7 +30,7 @@
         </div>
         <div class="btn toggle">
           <i class="btnPause fa-solid fa-pause"></i>
-          <i class="btnPlay fa-solid fa-play"></i>
+          <i class="btnPlay fa-solid fa-play playing"></i>
         </div>
         <div class="btn next">
           <i class="fa-solid fa-forward"></i>
@@ -71,6 +71,8 @@
     const cd = $(".cd-thumb");
     const audio = $("#audio");
     const playBtn = $(".toggle");
+    const btnPause = $(".btnPause");
+    const btnPlay = $(".btnPlay");
     const player = $(".player");
     const progress = $(".progress");
     const nextBtn = $(".fa-forward");
@@ -198,13 +200,15 @@
 
         audio.onplay = function () {
           _this.isplaying = true;
-          player.classList.add(".playing");
+          btnPlay.classList.remove("playing");
+          btnPause.classList.add("playing");
           cdThumbAnimate.play();
         };
 
         audio.onpause = function () {
           _this.isplaying = false;
-          player.classList.remove(".playing");
+          btnPlay.classList.add("playing");
+          btnPause.classList.remove("playing");
           cdThumbAnimate.pause();
         };
 
